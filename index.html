@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Feint6K</title>
+        <script src="template.v2.js"></script>
+        <link rel="icon" href="assets/icon_32.png" type="image/png" sizes="32x32">
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="https://d3js.org/d3-collection.v1.min.js"></script>
+        <script src="https://rawgit.com/nstrayer/slid3r/master/dist/slid3r.js"></script>
+        <script src="cross_fade.js"></script>
+        <link rel="stylesheet" href="style.css">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+            onload="renderMathInElement(document.body);">
+        </script>
+        <script src="assets/js/mesh_viewer.js"></script>
+        <script src="assets/js/splide.min.js"></script>
+        <script src="assets/js/transition.js"></script>
+        <link rel="stylesheet" href="assets/styles/style.css">
+        <link rel="stylesheet" href="assets/styles/splide.min.css">
+        <!-- <link rel="stylesheet" href="assets/styles/bulma.min.css"> -->
+        <script type="module" src="https://unpkg.com/@google/model-viewer@2.0.1/dist/model-viewer.min.js"></script>
+        <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.1.1/model-viewer.min.js"></script>
+        <style>
+            .slider-container {
+                margin: auto; /* Centers the container */
+                width: 80%; /* Adjust this to set the container's width */
+            }
+
+            input[type=range].styled-slider {
+                width: 100%; /* Makes the slider take the full width of its container */
+                /* Add any other styling for the slider here */
+            }
+
+            .button:hover span {
+                color: rgb(255, 204, 0);
+            }
+            .external-link.button.is-normal.is-rounded:hover {
+                color: rgb(255, 204, 0);
+            }
+        </style>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-0R1913EK65"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-0R1913EK65');
+        </script>
+    </head>
+    <body>
+        <div class="header-container">
+            <div class="header-content">
+              <h1>Rethinking Video-Text Understanding: Retrieval from Counterfactually Augmented Data</h1>
+              <h3>ECCV 2024</h3>
+              <p>
+                <a href="https://wufeim.github.io" target="_blank">Wufei Ma<sup>1</sup></a> &emsp;
+                <a href="https://sites.google.com/view/kaisqu/" target="_blank">Kai Li<sup>1</sup></a> &emsp;
+                <a href="https://scholar.google.com/citations?user=h8bGMF4AAAAJ&hl=en" target="_blank">Zhongshi Jiang<sup>1</sup></a> &emsp;
+                <a href="http://www.cs.umd.edu/~mmeshry/" target="_blank">Moustafa Meshry<sup>1</sup></a>
+                <a href="https://qihao067.github.io/" target="_blank">Qihao Liu<sup>2</sup></a>
+                <br>
+                <a href="https://csrhddlam.github.io/" target="_blank">Huiyu Wang<sup>3</sup></a> &emsp;
+                <a href="https://scholar.google.com/citations?user=AliuYd0AAAAJ&hl=en" target="_blank">Christian Häne<sup>1</sup></a> &emsp;
+                <a href="https://www.cs.jhu.edu/~ayuille/" target="_blank">Alan Yuille<sup>2</sup></a>
+                <br>
+                <br>
+                <a href="https://www.cs.jhu.edu/~ayuille/" target="_blank"><sup>1</sup>Meta Reality Labs</a> &emsp;
+                <a href="https://www.cs.jhu.edu/~ayuille/" target="_blank"><sup>2</sup>Johns Hopkins University</a> &emsp;
+                <a href="https://www.cs.jhu.edu/~ayuille/" target="_blank"><sup>3</sup>Meta AI</a>
+              </p>
+              <div class="button-container">
+                <a href="https://arxiv.org/abs/2401.01702" class="button" target="_blank">arXiv</a>
+                <a href="https://youtu.be/qdk6sVr47MQ?si=5CFkkqVLhMb76guF" class="button" target="_blank">Video</a>
+                <a href="https://github.com/vision-x-nyu/image-sculpting" class="button" target="_blank">Code</a>
+              </div>
+            </div>
+        </div>
+    <d-article>
+        <d-contents>
+            <nav>
+                <h4>Contents</h4>
+                <div><a href="#Framework">Framework</a></div>
+                <div><a href="#Comparisons">Comparisons</a></div>
+            </nav>
+        </d-contents>
+
+        <p style="text-align: justify;">
+            We present <strong>Image Sculpting</strong>, a new framework for editing 2D images by incorporating tools from 3D geometry and graphics. This approach differs markedly from existing methods, which are confined to 2D spaces and typically rely on textual instructions, leading to ambiguity and limited control. Image Sculpting converts 2D objects into 3D, enabling direct interaction with their 3D geometry. Post-editing, these objects are re-rendered into 2D, merging into the original image to produce high-fidelity results through a coarse-to-fine enhancement process. The framework supports precise, quantifiable, and physically-plausible editing options such as pose editing, rotation, translation, 3D composition, carving, and serial addition. It marks an initial step towards combining the creative freedom of generative models with the precision of graphics pipelines.
+        </p>
+
+        <section id="framework">
+            <h2 id="Framework">Framework</h2>
+            <p style="text-align: justify;">
+                Our proposed <strong>Image Sculpting </strong> framework,
+                which metaphorically suggests the flexible and precise sculpting of a 2D image
+                in a 3D space, integrates three key components:
+                <strong>
+                    (1) <a href="#3drecon"> single-view 3D reconstruction</a>
+                </strong>,
+                <strong>
+                    (2) <a href="#deform">manipulation of objects in 3D</a>
+                </strong>, and
+                <strong>
+                    (3) <a href="#enhance">a coarse-to-fine generative enhancement process</a>
+                </strong>.
+                More specifically, 2D objects are converted into 3D models,
+                granting users the ability to interact with and manipulate the 3D geometry directly,
+                which allows for precision in editing.
+                The manipulated objects are then seamlessly reincorporated into their original
+                or novel 2D contexts, maintaining visual coherence and fidelity.
+            </p>
+            <h3 id="3drecon">(1) Single-view 3D Reconstruction</h3>
+        <p>
+            <d-figure>
+                <figure>
+                    <img src="assets/images/pipeline/reconstruct.jpg" alt="Single-view Reconstruction">
+                    <figcaption>
+                        The process begins by converting the input image into a textured 3D model through a de-rendering process.
+                    </figcaption>
+                </figure>
+            </d-figure>
+        </p>
+        <p style="text-align: justify;">
+            Given an image of an object, our goal is to perform 3D reconstruction to obtain its 3D model.
+        </p>
+        <p style="text-align: justify;">
+            <strong>Image to 3D model</strong>
+             Our initial step involves segmenting the selected object from the input image
+             using SAM <d-cite key="kirillov2023segment"></d-cite>. Building upon this, we then train a NeRF
+             model using Zero-1-to-3 <d-cite key="zero123"></d-cite> and Score Distillation Sampling (SDS) <d-cite key="dreamfusion"></d-cite>.
+            We then convert a NeRF volume into a textured mesh using Marching cubes and texturing.
+        </p>
+        <h3 id="deform">(2) 3D Deformation</h3>
+        <p style="text-align: justify;">
+            <d-figure>
+                <figure>
+                    <img src="assets/images/pipeline/deformation.jpg" alt="3D Deformation">
+                    <figcaption>This model is then prepared for interactive deformation by creating a skeleton
+                        and calculating skinning weights. The user can modify the skeleton to deform the model,
+                        resulting in an initial coarse image.
+                    </figcaption>
+                </figure>
+            </d-figure>
+        </p>
+        <p style="text-align: justify;">
+            After obtaining the 3D model, a user can manually construct a skeleton and interactively
+            manipulate it by rotating the bones to achieve the target pose.
+            The mesh deformation affects the vertex positions of the object but not the UV
+            coordinates used for texture mapping; this procedure thus deforms the texture mapped
+            on the object following its deformation.
+        </p>
+        <p style="text-align: justify;">
+            However, the resulting image quality depends on the 3D reconstruction's accuracy,
+            which, in our case, is coarse and insufficient for the intended visual outcome.
+            Therefore, we rely on an image enhancement pipeline to convert the coarse rendering into a high-quality output.
+        </p>
+        <h3 id="enhance">(3) Coarse-to-Fine Generative Enhancement</h3>
+        <p style="text-align: justify;">
+            This section focuses on blending a coarsely rendered image back to its original background.
+            The aim is to restore textural details while keeping the edited geometry intact.
+            Image restoration and enhancement are commonly approached as image-to-image translation tasks<d-cite key="wang2020deep"></d-cite>,
+            leveraging the strong correlation between the source and target images.
+            Our challenge, however, presents a unique scenario:
+            despite overall similarities in appearance and texture between the input and desired output,
+            the input object's geometry changes, sometimes significantly, after user editing.
+        <p>
+            <p style="text-align: justify;">
+                <d-figure>
+                    <figure>
+                        <img src="assets/images/pipeline/dreambooth.jpg" alt="SEAL Framework">
+                        <figcaption>Overview of the coarse-to-fine generative enhancement model architecture.
+                            The red module denotes the one-shot DreamBooth,
+                            which requires tuning; the grey module is the SDXL Refiner <d-cite key="refiner"></d-cite>,
+                             which is frozen in our experiments.
+                        </figcaption>
+                    </figure>
+                </d-figure>
+            </p>
+        <p style="text-align: justify;">
+            To address the balance between preserving texture and geometry,
+            our approach begins by "personalizing" a pre-trained text-to-image
+            diffusion model. To capture the object's key features,
+            we fine-tune the diffusion model with DreamBooth <d-cite key="ruiz2023dreambooth"></d-cite> on <em>one</em> input
+            reference image. To maintain the geometry, we adapt a feature and attention injection
+             technique <d-cite key="tumanyan2023plug"></d-cite>, originally designed for semantic layout control.
+             Furthermore, we incorporate depth data from the 3D model through
+             ControlNet<d-cite key="zhang2023adding"></d-cite>. We find this integration crucial in
+             minimizing uncertainties during the enhancement process.
+        </p>
+
+        <p style="text-align: justify;">
+            <strong>One-shot Dreambooth</strong>
+            DreamBooth <d-cite key="ruiz2023dreambooth"></d-cite> fine-tunes
+            a pre-trained diffusion model with a few images for subject-driven generation.
+            The original DreamBooth paper has shown its ability to leverage the semantic
+            class priors to generate novel views of an object,
+            given only a few frontal images of the subject.
+            This aspect is particularly useful in our setting, since the coarse rendering
+            we work with lacks explicit viewpoint information. In our application,
+             we train DreamBooth using just a single example, which is the input image.
+             Notably, this one-shot approach with DreamBooth also effectively captures
+             the detailed texture, thereby filling in the textural gaps present in the
+              coarse rendering.
+        </p>
+        <p style="text-align: justify;">
+            <strong>Depth Control</strong>
+            We use depth ControlNet<d-cite key="zhang2023adding"></d-cite> to preserve
+            the geometric information of user editing. The depth map is
+            rendered directly from the deformed 3D model, bypassing
+            the need for any monocular depth estimation. For the background region,
+            we don't use the depth map. This depth map serves as a spatial control signal,
+             guiding the geometry generation in the final edited images. However,
+             relying solely on depth control is not sufficient &ndash; although it can
+             preserve the geometry to some extent, it still struggles in local,
+             more nuanced editing.
+        </p>
+        <p style="text-align: justify;" id="enhance_img">
+            <d-figure>
+                <figure>
+                    <img src="assets/images/pipeline/enhancement.jpg" alt="Enhancement Pipeline">
+                    <figcaption>To refine this edited image, we invert the coarse rendering \(I_c\) into the noise \(x_T^c\). We then inject self-attention maps \(A_t^c\) and feature maps \(f_t^c\)
+                        from the initial image's denoising process into the enhanced image denoising steps. This technique helps in preserving the geometry of the modified object while restoring the visual quality of the edited image.
+                        DDIM<sup>+</sup> represents DDIM with the DreamBooth fine-tuned and depth controlled model.
+                    </figcaption>
+                </figure>
+            </d-figure>
+        </p>
+        <p style="text-align: justify;">
+            <strong>Feature Injection</strong>
+            To better preserve the geometry, we use feature injection.
+            This  step begins with DDIM inversion<d-cite key="song2020denoising"></d-cite>
+            (with the DreamBooth finetuned, depth controlled diffusion model) of the
+            coarse rendering image to obtain the inverted latents.
+            At each denoising step, we denoise the inverted latent of the coarse rendering
+            along with the latent of the refined image, extracting their respective
+            feature maps (from the residual blocks) and self-attention maps
+            (from the transformer blocks).
+            It has been shown in PnP <d-cite key="tumanyan2023plug"></d-cite>
+            that the feature maps carry semantic information,
+            while the self-attention maps contain the geometry and layout of the
+            generated images. By overriding the feature and self-attention maps
+            during the enhanced image denoising steps with those from the coarser version,
+            we ensure the geometry of the enhanced image can reflect those of the coarse
+            rendering.
+        </p>
+        </section>
+
+        <section id="comparisons">
+            <h2 id="Comparisons">Comparisons</h2>
+            <p style="text-align: justify;">
+                Our approach introduces new editing features through precise 3D geometry control,
+                a capability not present in existing methods.
+                We compare our method with the state-of-the-art object editing techniques for a comprehensive analysis.
+            </p>
+            <p style="text-align: justify;" id="3dit">
+                <d-figure>
+                    <figure>
+                        <img src="assets/images/pipeline/3dit.jpg" alt="3DIT Comparisons">
+                        <figcaption>
+                            Comparisons with OBJect-3DIT<d-cite key="michel2023object"></d-cite> on object translation, rotation, and composition tasks.
+                        </figcaption>
+                    </figure>
+                </d-figure>
+            </p>
+            <p>
+                In this figure, we show that 3DIT <d-cite key="michel2023object"></d-cite>, designed
+                for 3D-aware editing via language instructions, faces limitations when applied to real,
+                complex images, largely because its training is based on a synthetic dataset.
+            </p>
+            <p style="text-align: justify;" id="drag">
+                <d-figure>
+                    <figure>
+                        <img src="assets/images/pipeline/drag.jpg" alt="Drag-related Comparisons">
+                        <figcaption>Comparisons with DragDiffusion <d-cite key="shi2023dragdiffusion"></d-cite> and
+                            ControlNet <d-cite key="zhang2023adding"></d-cite> on pose editing.
+                            These techniques face difficulties in handling complex pose modifications.
+                        </figcaption>
+                    </figure>
+                </d-figure>
+            </p>
+            <p style="text-align: justify;">
+                In this figure, we compare the pose editing ability with
+                DragDiffusion<d-cite key="shi2023dragdiffusion"></d-cite>  and
+                ControlNet <d-cite key="zhang2023adding"></d-cite>.
+                This comparison reveals that these methods encounter difficulties
+                with complex pose manipulations because they are constrained to the 2D domain.
+            </p>
+            <p style="text-align: justify;" id="drag">
+                <d-figure>
+                    <figure>
+                        <img src="assets/images/pipeline/text.jpg" alt="Text Comparisons">
+                        <figcaption>Comparisons with InstructPix2Pix <d-cite key="brooks2023instructpix2pix"></d-cite>
+                            and DALL·E 3 <d-cite key="dalle3"></d-cite> on serial Addition.
+                            These text-based editing methods fail to follow precise and quantifiable instructions.
+                        </figcaption>
+                    </figure>
+                </d-figure>
+            </p>
+            <p>
+                Furthermore, we show how text-based editing methods like
+                InstructPix2Pix <d-cite key="brooks2023instructpix2pix"></d-cite>  and DALL·E 3 <d-cite key="dalle3"></d-cite>
+                struggle with precise and quantifiable instructions.
+            </p>
+        </section>
+
+        </d-article>
+        <d-appendix>
+            <h3>BibTeX</h3>
+            <p class="bibtex">
+                @article{Image Sculpting,<br>
+                &nbsp;&nbsp;title={Image Sculpting: Precise Object Editing with 3D Geometry Control},<br>
+                &nbsp;&nbsp;author={Jiraphon Yenphraphai, Xichen Pan, Sainan Liu, Daniele Panozzo and Saining Xie},<br>
+                &nbsp;&nbsp;year={2024},<br>
+                &nbsp;&nbsp;journal={arXiv preprint arXiv:2401.01702},<br>
+                }
+            </p>
+
+            <d-footnote-list></d-footnote-list>
+            <d-citation-list></d-citation-list>
+          </d-appendix>
+
+            <d-footnote-list></d-footnote-list>
+            <d-citation-list></d-citation-list>
+        </d-appendix>
+
+          <!-- bibliography will be inlined during Distill pipeline's pre-rendering -->
+        <d-bibliography src="bibliography.bib"></d-bibliography>
+
+        <!-- <script type="text/bibliography">
+
+        </script> -->
+        <script src="contents_bar.js"></script>
+
+        <script>
+
+
+            window.dataLayer = window.dataLayer || [];
+
+            function initSlider(sliderId) {
+                return new Splide(sliderId, {
+                    type: 'fade',
+                    rewind: true,
+                    perPage: 1,
+                    perMove: 1,
+                    focus: 'center',
+                    width: '100%',
+                    arrows: 'slider',
+                    drag: false,
+                    autoplay: true,
+                    speed: 1000,
+                    lazyLoad: 'nearby',
+                }).mount();
+            }
+
+
+            // Initialize sliders
+            var poseSlider = initSlider('#pose-slider');
+            var carvingSlider = initSlider('#carving-slider');
+            var compositionSlider = initSlider('#composition-slider');
+            var translationSlider = initSlider('#translation-slider');
+            var rotationSlider = initSlider('#rotation-slider');
+            var additionSlider = initSlider('#addition-slider');
+            var imageAngles = {
+                cat: ['0000', '0001', '0002', '0003', '0004', '0005', '0007', '0008', '0009'],
+                chair: ['0000', '0001', '0002', '0003', '0004', '0005', '0007', '0009'],
+                astronaut0: ['0000', '0001', '0002', '0003', '0004', '0006', '0007', '0008', '0009'],
+                joker: ['0000', '0003', '0004', '0005', '0008', '0009'],
+                astronaut1: ['0001', '0002', '0003', '0004', '0008', '0009'],
+                astronaut2: ['0000', '0001', '0003', '0006', '0008', '0009'],
+                lalaland: ['0000', '0001', '0003', '0008', '0009'],
+            };
+
+            // Function to display and refresh the Carving slider
+            function showCarvingSlider() {
+                var carvingContainer = document.getElementById('Carving');
+                carvingContainer.style.display = 'block';
+                carvingSlider.refresh();
+            }
+            function showCompositionSlider() {
+                var carvingContainer = document.getElementById('Composition');
+                carvingContainer.style.display = 'block';
+                compositionSlider.refresh();
+            }
+
+            function showTranslationSlider() {
+                var carvingContainer = document.getElementById('Translation');
+                carvingContainer.style.display = 'block';
+                translationSlider.refresh();
+            }
+
+            function showAdditionSlider() {
+                var carvingContainer = document.getElementById('Addition');
+                carvingContainer.style.display = 'block';
+                additionSlider.refresh();
+            }
+
+
+
+            function showRotationSlider() {
+                var carvingContainer = document.getElementById('Rotation');
+                carvingContainer.style.display = 'block';
+                rotationSlider.refresh();
+            }
+
+            function showPoseSlider() {
+                var carvingContainer = document.getElementById('Pose');
+                carvingContainer.style.display = 'block';
+                poseSlider.refresh();
+            }
+
+
+            function showCategory(categoryName) {
+                if (categoryName === 'Carving') {
+                    showCarvingSlider();
+                }
+                else if (categoryName === 'Composition') {
+                    showCompositionSlider();
+                }
+                else if (categoryName === 'Translation') {
+                    showTranslationSlider();
+                }
+                else if (categoryName === 'Addition') {
+                    showAdditionSlider();
+                }
+                else if (categoryName === 'Rotation') {
+                    showRotationSlider();
+                }
+                else if (categoryName === 'Pose') {
+                    showPoseSlider();
+                }
+                var categories = document.getElementsByClassName("category-content");
+                for (var i = 0; i < categories.length; i++) {
+                    categories[i].style.display = "none";
+                }
+                document.getElementById(categoryName).style.display = "block";
+                var buttons = document.querySelectorAll('.button-container button');
+                buttons.forEach(function(button) {
+                    button.classList.remove('active');
+                });
+
+                // Add 'active' class to the clicked button
+                event.currentTarget.classList.add('active');
+            }
+            function rotate(index, name) {
+                var imagePath = `assets/images/pose_rotation/${name}/pose0/${imageAngles[name][index]}.jpg`;
+                var rotateElements = document.getElementsByClassName('rotate-' + name);
+
+                // Update all instances of rotateElements
+                for (var i = 0; i < rotateElements.length; i++) {
+                    rotateElements[i].src = imagePath;
+                }
+
+                var updatedOrientation = 90 + 36 * parseInt(imageAngles[name][index]);
+                var modelOrientation = updatedOrientation + "deg 270deg 180deg";
+                var rotationAfterElements = document.getElementsByClassName(name + '-rotation-after');
+
+                // Update all instances of rotationAfterElements
+                for (var j = 0; j < rotationAfterElements.length; j++) {
+                    rotationAfterElements[j].setAttribute('orientation', modelOrientation);
+                }
+            }
+
+
+
+            function updateRotation(direction, model) {
+                var currentRotationElement = document.getElementById('rotation' + model);
+                var currentRotationIndex = parseInt(currentRotationElement.value);
+                currentRotationIndex += direction;
+
+                if (currentRotationIndex < 0) currentRotationIndex = imageAngles[model].length - 1;
+                if (currentRotationIndex >= imageAngles[model].length) currentRotationIndex = 0;
+                currentRotationElement.value = currentRotationIndex;
+
+                rotate(currentRotationIndex, model);
+
+                var rotationDisplays = document.getElementsByClassName("rotationDisplay" + model);
+
+
+                for (var i = 0; i < rotationDisplays.length; i++) {
+                    rotationDisplays[i].textContent = "Rotation: " + 36 * imageAngles[model][currentRotationIndex] + "°";
+                }
+            }
+
+
+            function updateAddition(direction, model) {
+                var currentAdditionElement = document.getElementById('addition' + model);
+                var currentAdditionIndex = parseInt(currentAdditionElement.value);
+                currentAdditionIndex += direction;
+                currentAdditionIndex = Math.max(0, Math.min(currentAdditionIndex, 4));
+                currentAdditionElement.value = currentAdditionIndex;
+                // Toggle visibility of the plus and minus buttons using their IDs
+                var plusButton = document.getElementById('plusButton' + model);
+                var minusButton = document.getElementById('minusButton' + model);
+
+                plusButton.style.visibility = currentAdditionIndex >= 4 ? 'hidden' : 'visible';
+                minusButton.style.visibility = currentAdditionIndex <= 0 ? 'hidden' : 'visible';
+
+                addObject(currentAdditionIndex, model);
+                var additionDisplay = document.getElementsByClassName("additionDisplay" + model);
+                for (var j=0; j < additionDisplay.length; j++) {
+                    additionDisplay[j].textContent = "Number of Objects: " + currentAdditionIndex;
+                }
+
+
+            }
+
+            function addObject(num, name) {
+                var meshPath = `assets/meshes/addition/${name}_${num}.glb`;
+                var imagePath = `assets/images/addition/${name}/${num}.jpg`;
+                var allMesh = document.getElementsByClassName(name + "-after-add");
+                var allImg = document.getElementsByClassName("add-" + name);
+                for (var i = 0; i < allMesh.length; i++) {
+                    allMesh[i].src = meshPath;
+                    allImg[i].src = imagePath;
+                }
+
+                additionSlider.refresh();
+            }
+
+
+        </script>
+
+
+    </body>
+</html>
