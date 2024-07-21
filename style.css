@@ -356,3 +356,69 @@ d-article section{
     margin-bottom: 40px;
 }
 
+.table-container {
+  overflow: auto;
+  overflow-y: hidden;
+  max-width: 90vw;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch; /* for smoother scrolling on iOS */
+}
+
+.data-table {
+  border-collapse: separate;
+  border-spacing: 2.5px;
+  margin: 0 auto;
+  font-size: 12px;
+  min-width: 100%;
+  /* width: max-content; */
+  width: 100%;
+  line-height: 1.25;
+  border-collapse: separate;
+}
+
+.data-table th {
+  text-align: center;
+}
+
+.data-table td {
+  font-feature-settings: 'tnum';
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.data-table td, .data-table th {
+  padding: 0.25em 0.25em;
+}
+
+.data-table th:first-child, .data-table td:first-child {
+  text-align: left;
+}
+
+.tb-hdr {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  text-align: center !important;
+}
+
+.highlight {
+  background-color: #e6ffe6;
+  font-weight: bold;
+}
+
+.highlight-green {
+  background-color: #e6ffe6;
+  font-weight: bold;
+}
+
+.highlight-orange {
+  background-color: #fff2e6;
+}
+
+.highlight-gray td {
+  background-color: #f2f2f2;
+  text-align: left !important;
+}
+
+.highlight-blue {
+  background-color: #e6f2ff;
+}

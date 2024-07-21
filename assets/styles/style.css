@@ -1,6 +1,6 @@
 .subgrid {
-  grid-column: screen; 
-  display: grid; 
+  grid-column: screen;
+  display: grid;
   grid-template-columns: inherit;
   grid-template-rows: inherit;
   grid-column-gap: inherit;
@@ -27,7 +27,7 @@ button.is-rounded{
 }
 button.is-normal{font-size:1rem}
 .styled-link {
-  background-color: #b0b0b0; 
+  background-color: #b0b0b0;
   border: none;
   color: black;
   padding: 5px 20px; /* Vertical and horizontal padding */
@@ -76,10 +76,10 @@ button.is-normal{font-size:1rem}
     align-items: center;
     width: 70%;
     margin: auto;
-    transition: transform 0.5s ease; 
+    transition: transform 0.5s ease;
 }
 .image-container {
-    flex: 3; 
+    flex: 3;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -97,7 +97,7 @@ button.is-normal{font-size:1rem}
 }
 
 .image-container img{
-    width: 100%; 
+    width: 100%;
     height: auto;
 }
 
@@ -108,7 +108,7 @@ button.is-normal{font-size:1rem}
 
 /* Paragraph (caption) styling */
 .image-container p, .model-viewer-container p {
-    margin-top: 0px; 
+    margin-top: 0px;
     text-align: center;
     color: grey;
 }
@@ -150,20 +150,20 @@ button.is-normal{font-size:1rem}
 
   .highlight {
     animation: pulse 2s infinite;
-    color: #FF5733; /* change color as needed */
+    /* color: #FF5733; change color as needed */
     font-weight: bold;
   }
 @media (max-width: 1290px) {
     /* .model-container model-viewer {
-        width: 15vw; 
-        height: 15vh; 
+        width: 15vw;
+        height: 15vh;
         max-height: 140px;
     } */
     .image-container p {
-        font-size: 12px; 
+        font-size: 12px;
     }
     .model-viewer-container p {
-        font-size: 6px; 
+        font-size: 6px;
     }
     .editing-text {
         font-size: 12px;
@@ -174,7 +174,7 @@ button.is-normal{font-size:1rem}
         align-items: center;
         width: 93%;
         margin: auto;
-        transition: transform 0.5s ease; 
+        transition: transform 0.5s ease;
     }
     .model-viewer-container model-viewer {
     width: 100%;
@@ -185,7 +185,7 @@ button.is-normal{font-size:1rem}
     height: 28vw;
 }
 .model-single-container p {
-    font-size: 6px; 
+    font-size: 6px;
 }
 .responsive-div {
     width: 90%;
